@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict
 
-from broadcaster.models import ChangeEvent, CollectionConfig
+from mongo_broadcaster.models import ChangeEvent, CollectionConfig
 
 logger = logging.getLogger(__name__)
 
