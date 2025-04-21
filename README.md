@@ -33,22 +33,22 @@ pip install mongo_broadcaster[redis]    # Redis Pub/Sub support
 
 ```python
 from mongo_broadcaster import (
-	MongoChangeBroadcaster,
-	BroadcasterConfig,
-	CollectionConfig
+    MongoChangeBroadcaster,
+    BroadcasterConfig,
+    CollectionConfig
 )
 from mongo_broadcaster.channels import WebSocketChannel
 
 # Initialize with MongoDB connection
 config = BroadcasterConfig(
-	mongo_uri="mongodb://localhost:27017",
-	collections=[
-		CollectionConfig(
-			collection_name="users",
-			fields_to_watch=["name", "email"],
-			recipient_identifier="fullDocument._id"
-		)
-	]
+    mongo_uri="mongodb://localhost:27017",
+    collections=[
+        CollectionConfig(
+            collection_name="users",
+            fields_to_watch=["name", "email"],
+            recipient_identifier="fullDocument._id"
+        )
+     ]
 )
 
 broadcaster = MongoChangeBroadcaster(config)
@@ -77,26 +77,25 @@ from typing import Any, Dict
 
 
 class CustomMQTTChannel(BaseChannel):
-	def __init__(self, broker_url: str):
-		self.broker_url = broker_url
-		self.client = None
+    def __init__(self, broker_url: str):
+        self.broker_url = broker_url
+        self.client = None
 
-	async def connect(self):
-		"""Initialize your connection"""
-		self.client = await setup_mqtt_client(self.broker_url)
+    async def connect(self):
+	"""Initialize your connection"""
+	self.client = await setup_mqtt_client(self.broker_url)
 
-	async def send(self, recipient: str, message: Dict[str, Any]):
-		"""Send to specific recipient"""
-		await self.client.publish(f"changes/{recipient}", message)
+    async def send(self, recipient: str, message: Dict[str, Any]):
+	"""Send to specific recipient"""
+	await self.client.publish(f"changes/{recipient}", message)
 
-	async def broadcast(self, message: Dict[str, Any]):
-		"""Send to all subscribers"""
-		await self.client.publish("changes/all", message)
+    async def broadcast(self, message: Dict[str, Any]):
+	"""Send to all subscribers"""
+	await self.client.publish("changes/all", message)
 
-	async def disconnect(self):
-		"""Clean up resources"""
-		await self.client.disconnect()
-
+    async def disconnect(self):
+	"""Clean up resources"""
+	await self.client.disconnect()
 
 # Usage:
 broadcaster.add_channel(CustomMQTTChannel("mqtt://localhost"))
@@ -108,14 +107,14 @@ broadcaster.add_channel(CustomMQTTChannel("mqtt://localhost"))
 
 ```python
 CollectionConfig(
-	collection_name: str,
-database_name: Optional[str] = None,
+    collection_name: str,
+    database_name: Optional[str] = None,
 	# Fields to include in change events
-fields_to_watch: List[str] = [],
+    fields_to_watch: List[str] = [],
 	# Dot-notation path to identify recipients (e.g., "fullDocument._id")
-recipient_identifier: Optional[str] = None,
+    recipient_identifier: Optional[str] = None,
 	# MongoDB change stream options
-change_stream_config: ChangeStreamConfig = ChangeStreamConfig()
+    change_stream_config: ChangeStreamConfig = ChangeStreamConfig()
 )
 ```
 
@@ -132,12 +131,12 @@ ws_channel = WebSocketChannel()
 
 @app.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str):
-	await ws_channel.connect(client_id, websocket)
-	try:
-		while True:
-			await websocket.receive_text()
-	except WebSocketDisconnect:
-		await ws_channel.disconnect(client_id)
+    await ws_channel.connect(client_id, websocket)
+    try:
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+	await ws_channel.disconnect(client_id)
 ```
 
 Please see the [examples](https://github.com/Youngestdev/broadcaster/tree/main/mongo_broadcaster/examples) folder for
@@ -149,10 +148,10 @@ To add new channels:
 
 1. Create a subclass of `BaseChannel`
 2. Implement required methods:
-	- `connect()`
-	- `send()`
-	- `broadcast()`
-	- `disconnect()`
+  - `connect()`
+  - `send()`
+  - `broadcast()`
+  - `disconnect()`
 3. Submit a PR!
 
 ## License
