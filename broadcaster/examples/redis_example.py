@@ -1,5 +1,5 @@
 import asyncio
-from broadcaster import MongoChangeBroadcaster, BroadcasterConfig, CollectionConfig, RedisPubSubChannel
+from mongo_broadcaster import MongoChangeBroadcaster, BroadcasterConfig, CollectionConfig, RedisPubSubChannel
 
 
 async def main():

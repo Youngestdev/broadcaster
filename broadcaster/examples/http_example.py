@@ -1,5 +1,5 @@
 import asyncio
-from broadcaster import MongoChangeBroadcaster, BroadcasterConfig, CollectionConfig, HTTPCallbackChannel
+from mongo_broadcaster import MongoChangeBroadcaster, BroadcasterConfig, CollectionConfig, HTTPCallbackChannel
 
 
 async def main():

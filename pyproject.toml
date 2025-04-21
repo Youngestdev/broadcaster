@@ -3,14 +3,14 @@ requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "broadcaster"
+name = "mongo-broadcaster"
 version = "0.1.0"
 description = "Broadcast MongoDB change streams to WebSocket, Redis, HTTP, and more"
 readme = "README.md"
 authors = [{ name = "Abdulazeez Abdulazeez Adeshina", email = "youngestdev@gmail.com" }]
 license = { text = "MIT" }
 classifiers = [
-    "Programming Language :: Python :: 3.8+",
+    "Programming Language :: Python :: 3.8",
     "Intended Audience :: Developers",
     "Topic :: Database :: Database Engines/Servers",
 ]
