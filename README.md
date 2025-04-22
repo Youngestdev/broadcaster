@@ -3,11 +3,10 @@
 [![PyPI Version](https://img.shields.io/pypi/v/mongo-broadcaster.svg)](https://pypi.org/project/mongo-broadcaster/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/mongo-broadcaster)](https://pypi.org/project/mongo-broadcaster/)
 
-A real-time change stream broadcaster for MongoDB, supporting multiple delivery channels (WebSocket, Redis, HTTP, etc.)
-with extensible architecture.
+A real-time change stream broadcaster for MongoDB, supporting multiple delivery channels (WebSocket, Redis, HTTP, etc.) with extensible architecture.
 
 > Read the blog post on the
-> implementation [here](https://blog.youngest.dev/read/intoducing-mongo-broadcaster-a-multi-channel-mongo-db-change-stream-processor/).
+> implementation [here](https://blog.youngest.dev/read/introducing-mongo-broadcaster-a-multi-channel-mongo-db-change-stream-processor).
 >
 > ![Building a Versatile Data Streaming System with Broadcaster Package](https://res.cloudinary.com/doqqbfgk4/image/upload/v1745271783/_-_visual_selection_1_krsv1z.png)
 
