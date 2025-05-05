@@ -47,6 +47,15 @@ class MongoChangeBroadcaster:
 			)
 			self._tasks.append(task)
 
+	def _has_watched_field_changed(self, change: dict, fields: List[str]) -> bool:
+		"""Check if any of the watched fields changed"""
+		updated_fields = change.get("updateDescription", {}).get("updatedFields", {})
+
+		for field in fields:
+			if field in updated_fields:
+				return True
+		return False
+
 	async def _watch_collection_with_retry(self, config: CollectionConfig):
 		"""Wrapper with exponential backoff for resiliency"""
 		from tenacity import retry, stop_after_attempt, wait_exponential
@@ -89,15 +98,21 @@ class MongoChangeBroadcaster:
 	def _extract_nested_field(self, doc: dict, field_path: str) -> Optional[Any]:
 		"""Safely extract nested fields like 'owner.id'"""
 		value = doc
+
 		for key in field_path.split('.'):
-			value = value.get(key, {})
+			value = doc.get(key, {})
 			if not value:
-				return None
+				continue
 		return value
 
 	async def _process_change(self, change: dict, config: CollectionConfig):
 		"""Process and distribute a change event"""
 		try:
+			# Skip if none of the watched fields changed (for update events)
+			if change.get("operationType") == "update" and config.fields_to_watch:
+				if not self._has_watched_field_changed(change, config.fields_to_watch):
+					return  # Skip processing
+
 			# Extract recipient if configured
 			recipient = None
 			if config.recipient_identifier:
