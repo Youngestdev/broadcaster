@@ -32,18 +32,28 @@ def format_change_event(change: Dict[str, Any], config: CollectionConfig) -> Cha
 
 
 def extract_fields(change: Dict[str, Any], fields: list) -> Dict[str, Any]:
-    """Extract specific fields from change stream data"""
+    """Extract specific fields from change stream data, supporting insert and update operations."""
+    operation = change.get("operationType")
     result = {}
+
+    if operation == "insert":
+        source = change.get("fullDocument", {})
+    elif operation == "update":
+        source = change.get("updateDescription", {}).get("updatedFields", {})
+    else:
+        source = {}
+
     for field in fields:
-        keys = field.split('.')
-        value = change
+        keys = field.split(".")
+        value = source
         try:
             for key in keys:
                 value = value.get(key, {})
-            if value:  # Only add non-empty values
+            if value != {} and value is not None:
                 result[field] = value
         except AttributeError:
             continue
+
     return result
 
 
