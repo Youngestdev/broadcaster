@@ -4,6 +4,7 @@ from typing import Dict, Any, Tuple, Union
 from datetime import datetime, timedelta
 
 from fastapi import WebSocket
+from mongo_broadcaster.utils import safe_json_dumps
 from starlette.websockets import WebSocketDisconnect
 from contextlib import suppress
 
@@ -107,7 +108,7 @@ class WebSocketChannel(BaseChannel):
         if conn:
             websocket, _, _ = conn
             try:
-                await websocket.send_json(message)
+                await websocket.send_json(safe_json_dumps(message))
             except Exception as e:
                 logger.warning(f"[{recipient}] Send failed: {e}")
                 await self.disconnect(recipient)

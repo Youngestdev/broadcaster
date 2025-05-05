@@ -1,5 +1,8 @@
 import logging
 from typing import Any, Dict
+from datetime import date, datetime
+
+import json
 
 from mongo_broadcaster.models import ChangeEvent, CollectionConfig
 
@@ -63,3 +66,14 @@ def backoff_handler(details):
         f"Retrying in {details['wait']:.1f} seconds after "
         f"{details['tries']} tries calling {details['target']}"
     )
+
+
+def safe_json_dumps(data: Any) -> str:
+    """Serialize data to JSON with datetime support."""
+
+    def default(obj):
+        if isinstance(obj, (datetime, date)):
+            return obj.isoformat()
+        raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
+
+    return json.dumps(data, default=default)

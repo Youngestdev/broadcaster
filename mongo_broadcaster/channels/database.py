@@ -25,7 +25,7 @@ class DatabaseChannel(BaseChannel):
 
     async def send(self, recipient: str, message: Dict[str, Any]):
         """Save message to database"""
-        if not self.collection:
+        if self.collection is None:
             raise RuntimeError("Database connection not established")
 
         document = {
